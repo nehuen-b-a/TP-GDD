@@ -1,0 +1,239 @@
+@startuml  diagrama-entidad-relacion-BI.
+
+'----------------------------------
+'---------- HECHO VENTA -----------
+'----------------------------------
+
+entity "hecho_venta" {
+  * hechoVenta_tiempo_id: INT **<<PK, FK>>**
+  * hechoVenta_provinciaAlmacen_id: NCHAR(2) **<<PK, FK>>**
+  * hechoVenta_localidadCliente_id: INT **<<PK, FK>>**
+  * hechoVenta_rubro_id: INT **<<PK, FK>>**
+  * hechoVenta_rangoEtario_id: INT **<<PK, FK>>**
+  --
+    * hechoVenta_cantidadVentas: DECIMAL(18, 0)
+    * hechoRubro_totalVentas: DECIMAL(18, 2)
+}
+
+entity "tiempo" {
+  * tiempo_id: INT **<<PK>>**
+  --
+    * tiempo_anio: INT  
+    * tiempo_cuatrimestre: INT
+    * tiempo_mes: INT
+}
+
+entity "provincia"{
+  * provincia_id: NCHAR(2) **<<PK>>**
+  --
+    * provincia_nombre: NVARCHAR(50)
+}
+
+entity "localidad" {
+  * localidad_id: INT **<<PK>>**
+  --
+    * localidad_nombre: NVARCHAR(50) 
+}
+
+entity "rango_etario_cliente" {
+  * rangoEtarioCliente_id: INT **<<PK>>**
+  --
+    * rangoEtarioCliente_nombre: NVARCHAR(16)
+}
+note bottom
+    Rangos etarios: 
+        - JUVENTUD: < 25
+        - ADULTEZ_TEMPRANA: [25, 35)
+        - ADULTEZ_MEDIA: [35, 50]
+        - ADULTEZ_AVANZADA: > 50
+end note
+
+
+entity "rubro" {
+  * rubbro_id: INT **<<PK>>**
+    * rubro_nombre: NVARCHAR(50)
+}
+
+hecho_venta -- "tiempo"
+hecho_venta -- "localidad"
+hecho_venta -- "provincia"
+hecho_venta -- "rango_etario_cliente"
+hecho_venta -- "rubro"
+
+
+'----------------------------------
+'------- HECHO PUBLICACION --------
+'----------------------------------
+
+entity "hecho_publicacion" {
+  * hechoPublicacion_tiempo_id: INT **<<PK, FK>>**
+  * hechoPublicacion_subrubro_id: INT **<<PK, FK>>**
+  * hechoPublicacion_marca_id: INT **<<PK, FK>>**
+  --
+    * hechoPublicacion_totalDiasPublicaciones: DECIMAL(18, 0)
+    * hechoPublicacion_cantidadStockTotal: DECIMAL(18, 0)
+    * hechoPublicacion_cantidadPublicaciones: DECIMAL(18, 0)
+}
+
+entity "subrubro" {
+  * subrubro_id: INT **<<PK>>**
+  --
+    * subrubro_descripcion: NVARCHAR(50)
+}
+
+entity "marca" {
+  * marca_id: INT **<<PK>>**
+  --
+    * marca_nombre: NVARCHAR(50)
+}
+
+entity "tiempo " {
+  * tiempo_id: INT **<<PK>>**
+  --
+    * tiempo_anio: INT  
+    * tiempo_cuatrimestre: INT
+    * tiempo_mes: INT
+}
+
+hecho_publicacion -- "tiempo "
+hecho_publicacion -- "subrubro"
+hecho_publicacion -- "marca"
+
+
+'----------------------------------
+'----------- HECHO PAGO -----------
+'----------------------------------
+
+entity "hecho_pago" {
+  * hechoPago_tipoMedioPago_id: INT **<<PK, FK>>**
+  * hechoPago_medioPago_id: INT **<<PK, FK>>**
+  * hechoPago_tiempo_id: INT **<<PK, FK>>**
+  * hechoPago_localidadCliente_id: INT **<<PK, FK>>**
+  * hechoPago_cuota_id: INT **<<PK, FK>>**
+  --
+    * hechoPago_importeTotalCuotas: DECIMAL(18, 2)
+}
+
+entity "cuota"{
+  * cuota_id: INT **<<PK>>**
+  --
+    * cuota_cantidad: DECIMAL(18, 0)
+}
+
+entity "tipo_medio_pago" {
+  * tipoMedioPago_id: INT **<<PK>>**
+  --
+    * tipoMedioPago_nombre: NVARCHAR(50)
+}
+
+entity "medio_pago" {
+  * medioPago_id: INT **<<PK>>**
+  --
+    * medioPago_nombre: NVARCHAR(50)
+}
+
+entity "tiempo   " {
+  * tiempo_id: INT **<<PK>>**
+  --
+    * tiempo_anio: INT  
+    * tiempo_cuatrimestre: INT
+    * tiempo_mes: INT
+}
+
+entity "localidad " {
+  * localidad_id: INT **<<PK>>**
+  --
+    * localidad_nombre: NVARCHAR(50) 
+}
+
+hecho_pago -- "medio_pago"
+hecho_pago -- "tipo_medio_pago"
+hecho_pago -- "tiempo   "
+hecho_pago -- "localidad "
+hecho_pago -- "cuota"
+
+
+'----------------------------------
+'--------- HECHO FACTURA ----------
+'----------------------------------
+
+entity "hecho_factura" {
+  * hechoFactura_tiempo_id: INT **<<PK, FK>>**
+  * hechoFactura_concepto_id: INT **<<PK, FK>>**
+  * hechoFactura_provinciaVendedor_id: NCHAR(2) **<<PK, FK>>**
+  --
+    * hechoFactura_montoFacturado: DECIMAL(18, 2)
+}
+
+entity "concepto" {
+  * concepto_id: INT **<<PK>>**
+  --
+    * concepto_nombre: NVARCHAR(50)
+}
+
+entity "tiempo     " {
+  * tiempo_id: INT **<<PK>>**
+  --
+    * tiempo_anio: INT  
+    * tiempo_cuatrimestre: INT
+    * tiempo_mes: INT
+}
+
+entity "provincia "{
+  * provincia_id: NCHAR(2) **<<PK>>**
+  --
+    * provincia_nombre: NVARCHAR(50)
+}
+
+hecho_factura -- "tiempo     "
+hecho_factura -- "concepto"
+hecho_factura -- "provincia "
+
+
+'----------------------------------
+'---------- HECHO ENVIO -----------
+'----------------------------------
+
+entity "hecho_envio" {
+  * hechoEnvio_tiempo_id: INT **<<PK, FK>>**
+  * hechoVenta_provinciaAlmacen_id: NCHAR(2) **<<PK, FK>>**
+  * hechoVenta_localidadCliente_id: INT **<<PK, FK>>**
+  * hechoEnvio_tipoEnvio_id: INT **<<PK, FK>>**
+  --
+    * hechoEnvio_cantidadEnvios: DECIMAL(18, 0)
+    * hechoEnvio_totalEnviosCumplidos: DECIMAL(18, 0)
+    * hechoEnvio_totalCostoEnvio: DECIMAL(18, 2)
+}
+
+entity "tiempo      " {
+  * tiempo_id: INT **<<PK>>**
+  --
+    * tiempo_anio: INT  
+    * tiempo_cuatrimestre: INT
+    * tiempo_mes: INT
+}
+
+entity "provincia  "{
+  * provincia_id: NCHAR(2) **<<PK>>**
+  --
+    * provincia_nombre: NVARCHAR(50)
+}
+
+entity "localidad  " {
+  * localidad_id: INT **<<PK>>**
+  --
+    * localidad_nombre: NVARCHAR(50) 
+}
+
+entity "tipo_envio" {
+  * tipoEnvio_id: INT **<<PK>>**
+  --
+    * tipoEnvio_nombre: NVARCHAR(50)
+}
+
+hecho_envio -- "tiempo      "
+hecho_envio -- "provincia  "
+hecho_envio -- "localidad  "
+hecho_envio -- "tipo_envio"
+
+@enduml 

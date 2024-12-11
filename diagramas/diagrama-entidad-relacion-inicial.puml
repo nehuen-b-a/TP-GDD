@@ -1,0 +1,273 @@
+@startuml diagrama-entidad-relacion-inicial
+
+entity "publicacion" {
+  * publicacion_id: DECIMAL(18, 0) **<<PK>>**
+  --
+    * publicacion_producto_id: NVARCHAR(50) **<<FK>>**
+    * publicacion_vendedor_id: INT **<<FK>>**
+    * publicacion_almacen_id: DECIMAL(18, 0) **<<FK>>**
+    publicacion_descripcion: NVARCHAR(50)
+    * publicacion_fecha_inicio: DATE
+    * publicacion_fecha_fin: DATE
+    * publicacion_stock: DECIMAL(18,0)
+    * publicacion_precio: DECIMAL(18, 2)
+    * publicacion_costo: DECIMAL(18, 2)
+    * publicacion_porc_venta: DECIMAL(18, 2)
+    publicacion_fecha_modificacion: DATE
+}
+
+entity "producto" {
+  * producto_id: INT **<<PK>>** 
+  --
+    * producto_marca_id: INT **<<FK>>**
+    * producto_mod_id: DECIMAL(18, 0) **<<FK>>**
+    * producto_subrubro_id: INT **<<FK>>**
+    * producto_codigo: NVARCHAR(50)
+    * producto_descripcion: NVARCHAR(50)
+    * producto_precio: DECIMAL(18, 2)
+    * producto_fecha_alta: DATE
+    producto_fecha_modificacion: DATE
+}
+
+entity "marca"{
+  * marca_id: INT **<<PK>>**
+  --
+    * marca_descripcion: NVARCHAR(50)
+}
+
+entity "modelo"{
+  * modelo_id: DECIMAL(18, 0) **<<PK>>**
+  --
+    * modelo_descripcion: NVARCHAR(50)
+}
+
+entity "subrubro" {
+  * subrubro_id: INT **<<PK>>**
+  --
+    * subrubro_rubro_id: INT **<<FK>>**
+    * subrubro_descripcion: NVARCHAR(50)
+}
+
+entity "rubro" {
+  * rubro_id: INT **<<PK>>**
+  --
+    * rubro_descripcion: NVARCHAR(50)
+}
+
+entity "vendedor" {
+  * vendedor_id: INT **<<PK>>**
+  --
+    * vendedor_usuario_id: INT **<<FK>>**
+    * vendedor_razon_social: NVARCHAR(50) 
+    * vendedor_cuit: NVARCHAR(50)
+}
+
+entity "almacen" {
+  * almacen_id: DECIMAL(18, 0) **<<PK>>**
+  --
+    * almacen_domicilio_id: INT **<<FK>>**
+    almacen_nombre: NVARCHAR(50)
+    * almacen_costo_dia: DECIMAL(18, 2)
+}
+
+entity "historial_costo_almacen" {
+  * historialCostoAlmacen_id: INT **<<PK>>**
+  --
+    * historialCostoAlmacen_almacen_id: INT **<<FK>>**
+    * historialCostoAlmacen_fecha: DATE 
+    * historialCostoAlmacen_costo_dia: DECIMAL(18, 2)
+}
+
+entity "venta" {
+  * venta_id: DECIMAL(18, 0) **<<PK>>**
+  --
+    * venta_cliente_id: INT **<<FK>>**
+    * venta_fecha: DATETIME
+    * venta_total: DECIMAL(18, 2)
+}
+
+entity "detalle_venta" {
+  * detalleVenta_id: INT **<<PK>>**
+  --
+    * detalleVenta_venta_id: DECIMAL(18,0) **<<FK>>**
+    * detalleVenta_publicacion_id: DECIMAL(18, 0) **<<FK>>**
+    * detalleVenta_precio: DECIMAL(18, 2)
+    * detalleVenta_cantidad: DECIMAL(18, 0)
+    * detalleVenta_subtotal: DECIMAL(18, 2)
+}
+
+entity "cliente" {
+  * cliente_id: INT **<<PK>>**
+  --
+    * cliente_usuario_id: INT **<<FK>>**
+    * cliente_nombre: NVARCHAR(50)
+    * cliente_apellido: NVARCHAR(50)
+    * cliente_fecha_nacimiento: DATE
+    * cliente_dni: DECIMAL(18, 0)
+}
+
+entity "pago" {
+  * pago_id: INT **<<PK>>**
+  --
+    * pago_medioPago_id: INT **<<FK>>**
+    * pago_venta_id: DECIMAL(18, 0) **<<FK>>**
+    * pago_fecha: DATE
+    * pago_importe: DECIMAL(18, 2)
+}
+
+entity "detalle_pago" {
+  detallePago_id: INT **<<PK>>** 
+  --
+    * detallePago_pago_id: INT **<<FK>>**
+    detallePago_tarjeta_nro: NVARCHAR(50)
+    detallePago_tarjeta_fecha_vencimiento: DATE 
+    detallePago_cant_cuotas: DECIMAL(18, 0)
+    detallePago_cvu: NCHAR(22)
+    * detallePago_importe_parcial: DECIMAL(18, 2)
+}
+
+entity "medio_pago" {
+  * medioPago_id: INT **<<PK>>**
+  --
+   * medioPago_tipoMedioPago_id: INT **<<FK>>**
+   * medioPago_nombre: NVARCHAR(50)
+}
+
+entity "tipo_medio_pago" {
+  * tipoMedioPago_id: INT **<<PK>>**
+  --
+    * tipoMedioPago_nombre: NVARCHAR(50)
+}
+
+entity "usuario" {
+  * usuario_id: INT **<<PK>>**
+  --
+    * usuario_nombre: NVARCHAR(50)
+    * usuario_pass: NVARCHAR(50)
+    * usuario_fecha_creacion: DATE
+    * usuario_mail: NVARCHAR(50)
+}
+
+entity "domicilio" {
+  * domicilio_id: INT **<<PK>>**
+  --
+    * domicilio_localidad: INT **<<FK>>**
+    * domicilio_provincia: NCHAR(2) **<<FK>>**
+    * domicilio_calle: NVARCHAR(50)
+    * domicilio_nro_calle: DECIMAL(18, 0)
+    domicilio_piso: DECIMAL(18, 0)
+    domicilio_depto: NVARCHAR(50)
+    domicilio_cp: NVARCHAR(50)
+}
+
+entity "usuario_domicilio" {
+  * usuarioDomicilio_usuario_id: INT **<<PK, FK>>**
+  * usuarioDomicilio_domicilio_id: INT **<<PK, FK>>**
+  --
+}
+
+entity "localidad" {
+  * localidad_id: INT **<<PK>>**
+  --
+    * localidad_nombre: NVARCHAR(50) 
+}
+
+entity "provincia"{
+  * provincia_id: NCHAR(2) **<<PK>>**
+  --
+    * provincia_nombre: NVARCHAR(50)
+}
+
+entity "envio" {
+  * envio_id: INT **<<PK>>**
+  --
+   * envio_venta_id: DECIMAL(18, 0) **<<FK>>**
+   * envio_domicilio_id: INT **<<FK>>**
+   * envio_tipoEnvio_id: INT **<<FK>>**
+   * envio_fecha_programada: DATE
+   envio_hora_inicio: DECIMAL(18, 0)
+   envio_hora_fin:  DECIMAL(18, 0)
+   * envio_costo: DECIMAL(18, 2)
+   envio_fecha_entrega: DATETIME
+   * envio_estado: NVARCHAR(20)
+}
+
+entity "historial_estado_envio" {
+  * historialEstadoEnvio_id: INT **<<PK>>**
+  --
+    * historialEstadoEnvio_envio_id: INT **<<FK>>**
+    * historialEstadoEnvio_fecha: DATE 
+    * historialEstadoEnvio_estado: NVARCHAR(20)
+}
+
+entity "tipo_envio" {
+  * tipoEnvio_id: INT **<<PK>>**
+  --
+    * tipoEnvio_medio: NVARCHAR(50)
+}
+
+entity "factura" {
+  * factura_id: DECIMAL(18, 0) **<<PK>>**
+  --
+    * factura_usuario: INT **<<FK>>** 
+    * factura_fecha: DATE
+    * factura_total: DECIMAL(18, 2)
+}
+
+entity "factura_detalle" {
+  * facturaDetalle_id: INT **<<PK>>**
+  --
+    * facturaDetalle_factura_id: DECIMAL(18, 0) **<<FK>>**
+    * facturaDetalle_publicacion_id: DECIMAL(18, 0) **<<FK>>** 
+    * facturaDetalle_concepto_id: INT **<<FK>>**
+    * facturaDetalle_precio_unitario: DECIMAL(18, 2)
+    * facturaDetalle_cantidad: DECIMAL(18, 0)
+    * facturaDetalle_subtotal: DECIMAL(18, 2)
+}
+
+entity "concepto" {
+  * concepto_id: INT **<<PK>>**
+  --
+    * concepto_nombre: NVARCHAR(50)
+}
+
+concepto ||--o{ factura_detalle
+factura_detalle }|--|| factura
+factura_detalle }o--|| publicacion
+
+publicacion }o--|| producto
+producto }o--|| subrubro
+producto }o--|| marca
+subrubro }|--|| rubro
+
+publicacion }|--|| vendedor
+publicacion }|--|| almacen
+almacen ||-left-|{ historial_costo_almacen
+almacen |o--|| domicilio
+
+venta }o--|| cliente
+detalle_venta }|--|| venta
+detalle_venta }o--|| publicacion
+
+pago ||--|| venta
+factura }o--|| vendedor
+
+domicilio }o--|| provincia
+domicilio }o--|| localidad
+
+usuario_domicilio |o-right-|| domicilio
+usuario_domicilio }o--|| usuario
+modelo ||--o{ producto
+vendedor |o--|| usuario
+cliente |o--|| usuario
+
+envio }o--|| tipo_envio
+envio }o--|| domicilio
+envio ||-up-|| venta
+envio ||--|{ historial_estado_envio
+
+pago }o--|| medio_pago
+medio_pago }o--|| tipo_medio_pago
+pago ||--|{ detalle_pago
+
+@enduml
